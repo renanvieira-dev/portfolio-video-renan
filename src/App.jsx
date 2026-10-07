@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Play, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
+import { Play, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp, Menu, X, ExternalLink } from 'lucide-react';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [showAll, setShowAll] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const whatsappNumber = '5541997999350';
   const whatsappMessage = encodeURIComponent('Olá! Vi seu portfólio e gostaria de trocar uma ideia sobre um projeto de edição/motion.');
@@ -184,14 +185,12 @@ export default function App() {
             <span className="truncate">RENAN<span className="text-[#313AFF]">.</span>EDITOR</span>
           </div>
 
-          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
             <a href="#showcase" className="hover:text-white transition">Projetos</a>
             <a href="#sobre" className="hover:text-white transition">Como Funciona</a>
             <a href="#contato" className="hover:text-white transition">Contato</a>
           </nav>
 
-          {/* Botão visível apenas no Desktop */}
           <div className="hidden md:block">
             <a 
               href={whatsappUrl}
@@ -203,7 +202,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
@@ -213,7 +211,6 @@ export default function App() {
           </button>
         </div>
 
-        {/* Mobile Nav Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#101011] border-b border-white/10 px-6 py-6 flex flex-col gap-4">
             <a 
@@ -294,7 +291,6 @@ export default function App() {
             <p className="text-slate-400 text-xs sm:text-base">Uma amostra do ritmo e estilo de edição.</p>
           </div>
 
-          {/* Filtros por Categoria */}
           <div className="w-full md:w-auto overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
             <div className="flex gap-2 min-w-max">
               {categories.map((cat) => (
@@ -317,25 +313,30 @@ export default function App() {
           </div>
         </div>
 
-        {/* Grid Padronizado de Vídeos (Equalized Height Cards) */}
+        {/* Grid de Vídeos com Capa Interativa */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {visibleProjects.map((project) => (
             <div 
               key={project.id} 
-              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/10 transition duration-300 flex flex-col backdrop-blur-sm w-full h-full"
+              onClick={() => setSelectedVideo(project)}
+              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/20 transition duration-300 flex flex-col backdrop-blur-sm w-full h-full cursor-pointer group"
             >
-              <div className="w-full aspect-video bg-black relative shrink-0">
+              <div className="w-full aspect-video bg-black/60 relative shrink-0 flex items-center justify-center overflow-hidden">
                 <iframe
                   src={project.embedUrl}
                   title={project.title}
-                  className="w-full h-full border-0"
-                  allow="autoplay"
-                  allowFullScreen
+                  className="w-full h-full border-0 pointer-events-none opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
                 ></iframe>
+                {/* Overlay com Botão de Play */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-[#313AFF] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition duration-300">
+                    <Play className="w-6 h-6 fill-white ml-0.5" />
+                  </div>
+                </div>
               </div>
               <div className="p-5 sm:p-6 flex flex-col flex-grow text-left">
                 <span className="text-[11px] sm:text-xs font-bold text-[#313AFF] mb-2 uppercase tracking-wider">{project.category}</span>
-                <h3 className="text-base sm:text-xl font-bold mb-2 text-white">{project.title}</h3>
+                <h3 className="text-base sm:text-xl font-bold mb-2 text-white group-hover:text-[#313AFF] transition">{project.title}</h3>
                 <p className="text-slate-400 text-xs sm:text-sm mb-5 flex-grow leading-relaxed">{project.description}</p>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-white/5 mt-auto">
                   {project.tags.map((tag, idx) => (
@@ -349,7 +350,6 @@ export default function App() {
           ))}
         </div>
 
-        {/* Botão Ver Todos os Vídeos */}
         {filteredProjects.length > 6 && (
           <div className="mt-10 sm:mt-12 flex justify-center">
             <button
@@ -369,6 +369,57 @@ export default function App() {
           </div>
         )}
       </section>
+
+      {/* MODAL POP-UP PARA EXIBIÇÃO AMPLIADA DO VÍDEO */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div 
+            className="bg-[#101011] border border-white/20 rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header do Modal */}
+            <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+              <div>
+                <span className="text-xs font-bold text-[#313AFF] uppercase">{selectedVideo.category}</span>
+                <h3 className="text-lg sm:text-xl font-bold text-white">{selectedVideo.title}</h3>
+              </div>
+              <button 
+                onClick={() => setSelectedVideo(null)}
+                className="p-2 text-slate-400 hover:text-white rounded-lg bg-white/5 hover:bg-white/10 transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Container do Vídeo Expandido */}
+            <div className="w-full aspect-video bg-black relative">
+              <iframe
+                src={selectedVideo.embedUrl}
+                title={selectedVideo.title}
+                className="w-full h-full border-0"
+                allow="autoplay"
+                allowFullScreen
+              ></iframe>
+            </div>
+
+            {/* Footer do Modal */}
+            <div className="p-4 sm:p-5 bg-white/[0.02] border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <p className="text-slate-400 text-xs sm:text-sm">{selectedVideo.description}</p>
+              <a 
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 whitespace-nowrap"
+              >
+                Solicitar Vídeo Similar <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SOBRE MIM & HABILIDADES */}
       <section id="sobre" className="py-14 sm:py-20 px-4 sm:px-6 bg-white/[0.02] border-y border-white/5 relative">
