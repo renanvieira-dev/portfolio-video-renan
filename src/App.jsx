@@ -374,14 +374,14 @@ export default function App() {
         )}
       </section>
 
-      {/* MODAL POP-UP COM RODAPÉ LIMPO */}
+      {/* MODAL POP-UP LIMPO (SEM RODAPÉ) */}
       {selectedVideo && (
         <div 
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
           onClick={() => setSelectedVideo(null)}
         >
           <div 
-            className="bg-[#101011] border border-white/20 rounded-2xl overflow-hidden w-full max-w-4xl flex flex-col shadow-2xl relative my-auto max-h-[92vh]"
+            className="bg-[#101011] border border-white/20 rounded-2xl overflow-hidden w-full max-w-4xl flex flex-col shadow-2xl relative my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header do Modal */}
@@ -398,7 +398,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* Container do Vídeo */}
+            {/* Container do Vídeo Apenas */}
             <div className="w-full aspect-video bg-black relative shrink-0">
               <iframe
                 src={`https://drive.google.com/file/d/${selectedVideo.fileId}/preview`}
@@ -407,11 +407,6 @@ export default function App() {
                 allow="autoplay"
                 allowFullScreen
               ></iframe>
-            </div>
-
-            {/* Footer do Modal Limpo */}
-            <div className="p-4 sm:p-5 bg-white/[0.02] border-t border-white/10 flex items-center justify-between">
-              <p className="text-slate-400 text-xs sm:text-sm">{selectedVideo.description}</p>
             </div>
           </div>
         </div>
