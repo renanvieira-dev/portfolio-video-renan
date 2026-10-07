@@ -178,14 +178,14 @@ export default function App() {
   const visibleProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-[#101011] text-[#DFDFDF] flex flex-col selection:bg-[#313AFF] selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#101011] text-[#DFDFDF] flex flex-col selection:bg-[#313AFF] selection:text-white overflow-x-hidden w-full relative">
       
       {/* HEADER / NAVBAR */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#101011]/90 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#101011]/95 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-wider text-white">
-            <Film className="text-[#313AFF] w-5 h-5 sm:w-6 sm:h-6" />
-            <span>RENAN<span className="text-[#313AFF]">.</span>EDITOR</span>
+          <div className="flex items-center gap-2 font-bold text-base sm:text-xl tracking-wider text-white">
+            <Film className="text-[#313AFF] w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+            <span className="truncate">RENAN<span className="text-[#313AFF]">.</span>EDITOR</span>
           </div>
 
           {/* Desktop Nav */}
@@ -195,12 +195,13 @@ export default function App() {
             <a href="#contato" className="hover:text-white transition">Contato</a>
           </nav>
 
+          {/* Apenas Visível em Desktop */}
           <div className="hidden md:block">
             <a 
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-full text-sm transition shadow-lg shadow-[#313AFF]/20"
+              className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-full text-sm transition shadow-lg shadow-[#313AFF]/20 whitespace-nowrap"
             >
               Fazer Orçamento
             </a>
@@ -218,7 +219,7 @@ export default function App() {
 
         {/* Mobile Nav Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#101011] border-b border-white/10 px-6 py-6 flex flex-col gap-4 animate-fadeIn">
+          <div className="md:hidden bg-[#101011] border-b border-white/10 px-6 py-6 flex flex-col gap-4">
             <a 
               href="#showcase" 
               onClick={() => setMobileMenuOpen(false)}
@@ -253,7 +254,7 @@ export default function App() {
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-28 sm:pt-36 pb-14 sm:pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
+      <section className="relative pt-24 sm:pt-36 pb-12 sm:pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-[#313AFF]/15 rounded-full blur-[90px] sm:blur-[120px] pointer-events-none"></div>
 
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/5 border border-white/10 text-[#313AFF] text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-sm">
@@ -267,7 +268,7 @@ export default function App() {
           </span>
         </h1>
 
-        <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mb-8 sm:mb-10 leading-relaxed text-justify sm:text-center">
+        <p className="text-slate-400 text-sm sm:text-lg md:text-xl max-w-2xl mb-8 sm:mb-10 leading-relaxed text-center">
           Edição ágil e animações em motion design para Reels, comerciais e projetos que precisam prender a atenção do início ao fim.
         </p>
 
@@ -294,31 +295,33 @@ export default function App() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-6">
           <div className="text-left">
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">Trabalhos Recentes</h2>
-            <p className="text-slate-400 text-sm sm:text-base">Uma amostra do ritmo e estilo de edição.</p>
+            <p className="text-slate-400 text-xs sm:text-base">Uma amostra do ritmo e estilo de edição.</p>
           </div>
 
-          {/* Filtros por Categoria Scrollável em Mobile */}
-          <div className="flex overflow-x-auto pb-2 sm:pb-0 gap-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setActiveCategory(cat);
-                  setShowAll(false);
-                }}
-                className={`whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition shrink-0 ${
-                  activeCategory === cat
-                    ? 'bg-[#313AFF] text-white font-bold shadow-md shadow-[#313AFF]/30'
-                    : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Filtros por Categoria com rolagem suave isolada */}
+          <div className="w-full md:w-auto overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
+            <div className="flex gap-2 min-w-max">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setShowAll(false);
+                  }}
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
+                    activeCategory === cat
+                      ? 'bg-[#313AFF] text-white font-bold shadow-md shadow-[#313AFF]/30'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Grid dos Vídeos com Adaptação para Formato Vertical / Horizontal */}
+        {/* Grid dos Vídeos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
           {visibleProjects.map((project) => (
             <div 
@@ -336,8 +339,8 @@ export default function App() {
               </div>
               <div className="p-5 sm:p-6 flex flex-col flex-grow text-left">
                 <span className="text-[11px] sm:text-xs font-bold text-[#313AFF] mb-2 uppercase tracking-wider">{project.category}</span>
-                <h3 className="text-lg sm:text-xl font-bold mb-2 text-white">{project.title}</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-5 flex-grow leading-relaxed text-justify">{project.description}</p>
+                <h3 className="text-base sm:text-xl font-bold mb-2 text-white">{project.title}</h3>
+                <p className="text-slate-400 text-xs sm:text-sm mb-5 flex-grow leading-relaxed">{project.description}</p>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-white/5">
                   {project.tags.map((tag, idx) => (
                     <span key={idx} className="text-[10px] sm:text-xs bg-white/5 border border-white/10 text-slate-300 px-2.5 py-1 rounded-md">
@@ -350,7 +353,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* Botão Ver Todos os Vídeos / Mostrar Menos */}
+        {/* Botão Ver Todos os Vídeos */}
         {filteredProjects.length > 6 && (
           <div className="mt-10 sm:mt-12 flex justify-center">
             <button
@@ -376,7 +379,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 sm:gap-12 items-center">
           <div className="text-left">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-white">Especialidades & Workflow</h2>
-            <p className="text-slate-400 text-sm sm:text-base mb-6 leading-relaxed text-justify">
+            <p className="text-slate-400 text-xs sm:text-base mb-6 leading-relaxed">
               Foco no ritmo do vídeo, design de som e elementos visuais animados que tornam o conteúdo interessante de assistir.
             </p>
             <div className="space-y-3">
@@ -397,7 +400,7 @@ export default function App() {
           
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-md text-left">
             <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-white">Tem um projeto em mente?</h3>
-            <p className="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed text-justify">
+            <p className="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed">
               Aberto para parcerias com criadores, produtoras, agências e trabalhos freelancers.
             </p>
             <a 
@@ -417,7 +420,7 @@ export default function App() {
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6 sm:gap-8 border-b border-white/10 pb-10 sm:pb-12 mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">Bora tirar o projeto do papel?</h2>
-            <p className="text-slate-400 text-sm sm:text-base">Me manda uma mensagem para conversarmos sobre o seu vídeo.</p>
+            <p className="text-slate-400 text-xs sm:text-base">Me manda uma mensagem para conversarmos sobre o seu vídeo.</p>
           </div>
           <a
             href={whatsappUrl}
