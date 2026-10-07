@@ -181,7 +181,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2 font-bold text-xl tracking-wider text-white">
             <Film className="text-[#313AFF] w-6 h-6" />
-            <span>PORTFÓLIO<span className="text-[#313AFF]">.</span>FILMS</span>
+            <span>RENAN<span className="text-[#313AFF]">.</span>EDITOR</span>
           </div>
           <nav className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
             <a href="#showcase" className="hover:text-white transition">Projetos</a>
