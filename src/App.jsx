@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp, Menu, X, ExternalLink } from 'lucide-react';
+import { Play, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
@@ -323,7 +323,6 @@ export default function App() {
                 onClick={() => setSelectedVideo(project)}
                 className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/20 transition duration-300 flex flex-col backdrop-blur-sm w-full h-full cursor-pointer group"
               >
-                {/* Capa Limpa com Apenas UM Botão de Play */}
                 <div className="w-full aspect-video bg-black relative shrink-0 overflow-hidden">
                   <img
                     src={thumbnailUrl}
@@ -375,7 +374,7 @@ export default function App() {
         )}
       </section>
 
-      {/* MODAL POP-UP TOTALMENTE AJUSTADO */}
+      {/* MODAL POP-UP COM RODAPÉ LIMPO */}
       {selectedVideo && (
         <div 
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
@@ -410,17 +409,9 @@ export default function App() {
               ></iframe>
             </div>
 
-            {/* Footer do Modal com Botão Visível */}
-            <div className="p-4 sm:p-5 bg-white/[0.02] border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 overflow-y-auto">
-              <p className="text-slate-400 text-xs sm:text-sm text-center sm:text-left">{selectedVideo.description}</p>
-              <a 
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 whitespace-nowrap shrink-0 shadow-lg shadow-[#313AFF]/20"
-              >
-                Solicitar Vídeo Similar <ExternalLink className="w-4 h-4" />
-              </a>
+            {/* Footer do Modal Limpo */}
+            <div className="p-4 sm:p-5 bg-white/[0.02] border-t border-white/10 flex items-center justify-between">
+              <p className="text-slate-400 text-xs sm:text-sm">{selectedVideo.description}</p>
             </div>
           </div>
         </div>
