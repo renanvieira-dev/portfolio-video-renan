@@ -19,8 +19,7 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Corte dinâmico na vertical com foco em retenção, elementos sonoros e ritmo acelerado.',
       embedUrl: 'https://drive.google.com/file/d/1SJ0fDVBizoRnHuaNjR5qKCIphf_qa-r6/preview',
-      tags: ['Corte Dinâmico', 'Retenção', 'Reels', 'Sound Design'],
-      isVertical: true
+      tags: ['Corte Dinâmico', 'Retenção', 'Reels', 'Sound Design']
     },
     {
       id: 2,
@@ -76,8 +75,7 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Formato vertical otimizado para engajamento rápido e consumo em redes sociais.',
       embedUrl: 'https://drive.google.com/file/d/1hCO43K4yybjmQpa931jeCC4tkh_HaqgV/preview',
-      tags: ['Shorts', 'Reels', 'Engajamento'],
-      isVertical: true
+      tags: ['Shorts', 'Reels', 'Engajamento']
     },
     {
       id: 9,
@@ -125,8 +123,7 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Corte ágil na vertical com efeitos de transição e áudio sincronizado.',
       embedUrl: 'https://drive.google.com/file/d/15YAAgaNF6iwOUrVWTr0r3C1fkjaab3RX/preview',
-      tags: ['TikTok', 'Reels', 'Corte Seco'],
-      isVertical: true
+      tags: ['TikTok', 'Reels', 'Corte Seco']
     },
     {
       id: 15,
@@ -134,8 +131,7 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Edição na vertical focada em ritmo acelerado e dinamismo de cortes.',
       embedUrl: 'https://drive.google.com/file/d/12bk1Wglf7zVZ2jYCAn3CIvJbLBfCfmXU/preview',
-      tags: ['Shorts', 'Reels', 'Ritmo'],
-      isVertical: true
+      tags: ['Shorts', 'Reels', 'Ritmo']
     },
     {
       id: 16,
@@ -195,7 +191,7 @@ export default function App() {
             <a href="#contato" className="hover:text-white transition">Contato</a>
           </nav>
 
-          {/* Apenas Visível em Desktop */}
+          {/* Botão visível apenas no Desktop */}
           <div className="hidden md:block">
             <a 
               href={whatsappUrl}
@@ -207,7 +203,7 @@ export default function App() {
             </a>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
@@ -298,7 +294,7 @@ export default function App() {
             <p className="text-slate-400 text-xs sm:text-base">Uma amostra do ritmo e estilo de edição.</p>
           </div>
 
-          {/* Filtros por Categoria com rolagem suave isolada */}
+          {/* Filtros por Categoria */}
           <div className="w-full md:w-auto overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
             <div className="flex gap-2 min-w-max">
               {categories.map((cat) => (
@@ -321,14 +317,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Grid dos Vídeos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+        {/* Grid Padronizado de Vídeos (Equalized Height Cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {visibleProjects.map((project) => (
             <div 
               key={project.id} 
-              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/10 transition duration-300 flex flex-col backdrop-blur-sm w-full"
+              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/10 transition duration-300 flex flex-col backdrop-blur-sm w-full h-full"
             >
-              <div className={`w-full bg-black relative ${project.isVertical ? 'aspect-[9/16] max-h-[500px]' : 'aspect-video'}`}>
+              <div className="w-full aspect-video bg-black relative shrink-0">
                 <iframe
                   src={project.embedUrl}
                   title={project.title}
@@ -341,7 +337,7 @@ export default function App() {
                 <span className="text-[11px] sm:text-xs font-bold text-[#313AFF] mb-2 uppercase tracking-wider">{project.category}</span>
                 <h3 className="text-base sm:text-xl font-bold mb-2 text-white">{project.title}</h3>
                 <p className="text-slate-400 text-xs sm:text-sm mb-5 flex-grow leading-relaxed">{project.description}</p>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-white/5">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-white/5 mt-auto">
                   {project.tags.map((tag, idx) => (
                     <span key={idx} className="text-[10px] sm:text-xs bg-white/5 border border-white/10 text-slate-300 px-2.5 py-1 rounded-md">
                       {tag}
