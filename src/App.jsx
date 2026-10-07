@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Play, Video, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Play, Film, Sparkles, Send, CheckCircle, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [showAll, setShowAll] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const whatsappNumber = '5541997999350';
   const whatsappMessage = encodeURIComponent('Olá! Vi seu portfólio e gostaria de trocar uma ideia sobre um projeto de edição/motion.');
@@ -11,7 +12,6 @@ export default function App() {
 
   const categories = ['Todos', 'Reels / Shorts', 'Motion Graphics', 'Vídeos de Impacto', 'Comercial'];
 
-  // Todos os 19 vídeos do Drive
   const projects = [
     {
       id: 1,
@@ -19,7 +19,8 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Corte dinâmico na vertical com foco em retenção, elementos sonoros e ritmo acelerado.',
       embedUrl: 'https://drive.google.com/file/d/1SJ0fDVBizoRnHuaNjR5qKCIphf_qa-r6/preview',
-      tags: ['Corte Dinâmico', 'Retenção', 'Reels', 'Sound Design']
+      tags: ['Corte Dinâmico', 'Retenção', 'Reels', 'Sound Design'],
+      isVertical: true
     },
     {
       id: 2,
@@ -75,7 +76,8 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Formato vertical otimizado para engajamento rápido e consumo em redes sociais.',
       embedUrl: 'https://drive.google.com/file/d/1hCO43K4yybjmQpa931jeCC4tkh_HaqgV/preview',
-      tags: ['Shorts', 'Reels', 'Engajamento']
+      tags: ['Shorts', 'Reels', 'Engajamento'],
+      isVertical: true
     },
     {
       id: 9,
@@ -123,7 +125,8 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Corte ágil na vertical com efeitos de transição e áudio sincronizado.',
       embedUrl: 'https://drive.google.com/file/d/15YAAgaNF6iwOUrVWTr0r3C1fkjaab3RX/preview',
-      tags: ['TikTok', 'Reels', 'Corte Seco']
+      tags: ['TikTok', 'Reels', 'Corte Seco'],
+      isVertical: true
     },
     {
       id: 15,
@@ -131,7 +134,8 @@ export default function App() {
       category: 'Reels / Shorts',
       description: 'Edição na vertical focada em ritmo acelerado e dinamismo de cortes.',
       embedUrl: 'https://drive.google.com/file/d/12bk1Wglf7zVZ2jYCAn3CIvJbLBfCfmXU/preview',
-      tags: ['Shorts', 'Reels', 'Ritmo']
+      tags: ['Shorts', 'Reels', 'Ritmo'],
+      isVertical: true
     },
     {
       id: 16,
@@ -174,54 +178,103 @@ export default function App() {
   const visibleProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-[#101011] text-[#DFDFDF] flex flex-col selection:bg-[#313AFF] selection:text-white">
+    <div className="min-h-screen bg-[#101011] text-[#DFDFDF] flex flex-col selection:bg-[#313AFF] selection:text-white overflow-x-hidden">
       
       {/* HEADER / NAVBAR */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#101011]/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-xl tracking-wider text-white">
-            <Film className="text-[#313AFF] w-6 h-6" />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#101011]/90 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-wider text-white">
+            <Film className="text-[#313AFF] w-5 h-5 sm:w-6 sm:h-6" />
             <span>RENAN<span className="text-[#313AFF]">.</span>EDITOR</span>
           </div>
-          <nav className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
             <a href="#showcase" className="hover:text-white transition">Projetos</a>
             <a href="#sobre" className="hover:text-white transition">Como Funciona</a>
             <a href="#contato" className="hover:text-white transition">Contato</a>
           </nav>
-          <a 
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-full text-sm transition shadow-lg shadow-[#313AFF]/20"
+
+          <div className="hidden md:block">
+            <a 
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-semibold px-6 py-2.5 rounded-full text-sm transition shadow-lg shadow-[#313AFF]/20"
+            >
+              Fazer Orçamento
+            </a>
+          </div>
+
+          {/* Mobile Menu Toggle Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-slate-300 hover:text-white focus:outline-none"
+            aria-label="Abrir Menu"
           >
-            Fazer Orçamento
-          </a>
+            {mobileMenuOpen ? <X className="w-6 h-6 text-[#313AFF]" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {/* Mobile Nav Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#101011] border-b border-white/10 px-6 py-6 flex flex-col gap-4 animate-fadeIn">
+            <a 
+              href="#showcase" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-slate-200 hover:text-[#313AFF] font-medium py-1 transition"
+            >
+              Projetos
+            </a>
+            <a 
+              href="#sobre" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-slate-200 hover:text-[#313AFF] font-medium py-1 transition"
+            >
+              Como Funciona
+            </a>
+            <a 
+              href="#contato" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-slate-200 hover:text-[#313AFF] font-medium py-1 transition"
+            >
+              Contato
+            </a>
+            <a 
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#313AFF] text-white text-center font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-[#313AFF]/20 mt-2"
+            >
+              Fazer Orçamento
+            </a>
+          </div>
+        )}
       </header>
 
       {/* HERO SECTION */}
-      <section className="relative pt-36 pb-20 px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#313AFF]/15 rounded-full blur-[120px] pointer-events-none"></div>
+      <section className="relative pt-28 sm:pt-36 pb-14 sm:pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-[#313AFF]/15 rounded-full blur-[90px] sm:blur-[120px] pointer-events-none"></div>
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[#313AFF] text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-sm">
-          <Sparkles className="w-4 h-4" /> Edição Dinâmica & Motion Design
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/5 border border-white/10 text-[#313AFF] text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-sm">
+          <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Edição Dinâmica & Motion Design
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6 text-white">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4 sm:mb-6 text-white text-balance">
           Vídeos com ritmo, retenção <br className="hidden sm:inline" />
           <span className="bg-gradient-to-r from-white via-[#DFDFDF] to-[#313AFF] bg-clip-text text-transparent">
             e identidade visual marcante
           </span>
         </h1>
 
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+        <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mb-8 sm:mb-10 leading-relaxed text-justify sm:text-center">
           Edição ágil e animações em motion design para Reels, comerciais e projetos que precisam prender a atenção do início ao fim.
         </p>
 
-        <div className="flex flex-wrap gap-4 justify-center relative z-10">
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3.5 justify-center relative z-10 px-2 sm:px-0">
           <a 
             href="#showcase" 
-            className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-bold px-8 py-3.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-[#313AFF]/25"
+            className="w-full sm:w-auto justify-center bg-[#313AFF] hover:bg-[#252ccb] text-white font-bold px-8 py-3.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-[#313AFF]/25 text-center"
           >
             Ver Trabalhos <Play className="w-4 h-4 fill-white" />
           </a>
@@ -229,7 +282,7 @@ export default function App() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 font-semibold px-8 py-3.5 rounded-xl transition text-white backdrop-blur-sm"
+            className="w-full sm:w-auto justify-center border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 font-semibold px-8 py-3.5 rounded-xl transition text-white backdrop-blur-sm text-center"
           >
             Trocar uma Ideia
           </a>
@@ -237,14 +290,15 @@ export default function App() {
       </section>
 
       {/* SHOWCASE / PROJETOS */}
-      <section id="showcase" className="py-20 px-6 max-w-6xl mx-auto w-full relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <h2 className="text-3xl font-bold mb-2 text-white">Trabalhos Recentes</h2>
-            <p className="text-slate-400">Uma amostra do ritmo e estilo de edição.</p>
+      <section id="showcase" className="py-12 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto w-full relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-6">
+          <div className="text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">Trabalhos Recentes</h2>
+            <p className="text-slate-400 text-sm sm:text-base">Uma amostra do ritmo e estilo de edição.</p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          {/* Filtros por Categoria Scrollável em Mobile */}
+          <div className="flex overflow-x-auto pb-2 sm:pb-0 gap-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -252,7 +306,7 @@ export default function App() {
                   setActiveCategory(cat);
                   setShowAll(false);
                 }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`whitespace-nowrap px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition shrink-0 ${
                   activeCategory === cat
                     ? 'bg-[#313AFF] text-white font-bold shadow-md shadow-[#313AFF]/30'
                     : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
@@ -264,14 +318,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Grid de Vídeos */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Grid dos Vídeos com Adaptação para Formato Vertical / Horizontal */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
           {visibleProjects.map((project) => (
             <div 
               key={project.id} 
-              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/10 transition duration-300 flex flex-col backdrop-blur-sm"
+              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#313AFF]/60 hover:shadow-xl hover:shadow-[#313AFF]/10 transition duration-300 flex flex-col backdrop-blur-sm w-full"
             >
-              <div className="aspect-video w-full bg-black relative">
+              <div className={`w-full bg-black relative ${project.isVertical ? 'aspect-[9/16] max-h-[500px]' : 'aspect-video'}`}>
                 <iframe
                   src={project.embedUrl}
                   title={project.title}
@@ -280,13 +334,13 @@ export default function App() {
                   allowFullScreen
                 ></iframe>
               </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <span className="text-xs font-bold text-[#313AFF] mb-2 uppercase tracking-wider">{project.category}</span>
-                <h3 className="text-xl font-bold mb-2 text-white">{project.title}</h3>
-                <p className="text-slate-400 text-sm mb-6 flex-grow">{project.description}</p>
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+              <div className="p-5 sm:p-6 flex flex-col flex-grow text-left">
+                <span className="text-[11px] sm:text-xs font-bold text-[#313AFF] mb-2 uppercase tracking-wider">{project.category}</span>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 text-white">{project.title}</h3>
+                <p className="text-slate-400 text-xs sm:text-sm mb-5 flex-grow leading-relaxed text-justify">{project.description}</p>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-white/5">
                   {project.tags.map((tag, idx) => (
-                    <span key={idx} className="text-xs bg-white/5 border border-white/10 text-slate-300 px-2.5 py-1 rounded-md">
+                    <span key={idx} className="text-[10px] sm:text-xs bg-white/5 border border-white/10 text-slate-300 px-2.5 py-1 rounded-md">
                       {tag}
                     </span>
                   ))}
@@ -296,12 +350,12 @@ export default function App() {
           ))}
         </div>
 
-        {/* Botão Ver Todos os Vídeos */}
+        {/* Botão Ver Todos os Vídeos / Mostrar Menos */}
         {filteredProjects.length > 6 && (
-          <div className="mt-12 flex justify-center">
+          <div className="mt-10 sm:mt-12 flex justify-center">
             <button
               onClick={() => setShowAll(!showAll)}
-              className="bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#313AFF] text-white font-bold px-8 py-3.5 rounded-xl transition flex items-center gap-3 backdrop-blur-sm shadow-lg hover:shadow-[#313AFF]/20"
+              className="w-full sm:w-auto bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#313AFF] text-white font-bold px-8 py-3.5 rounded-xl transition flex items-center justify-center gap-3 backdrop-blur-sm shadow-lg hover:shadow-[#313AFF]/20 text-sm"
             >
               {showAll ? (
                 <>
@@ -318,11 +372,11 @@ export default function App() {
       </section>
 
       {/* SOBRE MIM & HABILIDADES */}
-      <section id="sobre" className="py-20 px-6 bg-white/[0.02] border-y border-white/5 relative">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-6 text-white">Especialidades & Workflow</h2>
-            <p className="text-slate-400 mb-6 leading-relaxed">
+      <section id="sobre" className="py-14 sm:py-20 px-4 sm:px-6 bg-white/[0.02] border-y border-white/5 relative">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 sm:gap-12 items-center">
+          <div className="text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-white">Especialidades & Workflow</h2>
+            <p className="text-slate-400 text-sm sm:text-base mb-6 leading-relaxed text-justify">
               Foco no ritmo do vídeo, design de som e elementos visuais animados que tornam o conteúdo interessante de assistir.
             </p>
             <div className="space-y-3">
@@ -333,24 +387,24 @@ export default function App() {
                 'Edição Vertical de Alta Retenção (Reels/TikTok)',
                 'Color Grading & Correção de Cor'
               ].map((skill, i) => (
-                <div key={i} className="flex items-center gap-3 text-slate-200">
-                  <CheckCircle className="w-5 h-5 text-[#313AFF]" />
+                <div key={i} className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm">
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#313AFF] shrink-0" />
                   <span>{skill}</span>
                 </div>
               ))}
             </div>
           </div>
           
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-4 text-white">Tem um projeto em mente?</h3>
-            <p className="text-slate-400 text-sm mb-6">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-md text-left">
+            <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-white">Tem um projeto em mente?</h3>
+            <p className="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed text-justify">
               Aberto para parcerias com criadores, produtoras, agências e trabalhos freelancers.
             </p>
             <a 
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-[#313AFF] hover:bg-[#252ccb] text-white font-extrabold py-3.5 rounded-xl transition flex justify-center items-center gap-2 shadow-lg shadow-[#313AFF]/25"
+              className="w-full bg-[#313AFF] hover:bg-[#252ccb] text-white font-extrabold py-3.5 rounded-xl transition flex justify-center items-center gap-2 shadow-lg shadow-[#313AFF]/25 text-sm"
             >
               Iniciar Conversa
             </a>
@@ -359,23 +413,23 @@ export default function App() {
       </section>
 
       {/* FOOTER / CONTATO */}
-      <footer id="contato" className="py-16 px-6 max-w-6xl mx-auto w-full mt-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-white/10 pb-12 mb-8">
+      <footer id="contato" className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto w-full mt-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6 sm:gap-8 border-b border-white/10 pb-10 sm:pb-12 mb-8">
           <div>
-            <h2 className="text-3xl font-bold mb-2 text-white">Bora tirar o projeto do papel?</h2>
-            <p className="text-slate-400">Me manda uma mensagem para conversarmos sobre o seu vídeo.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">Bora tirar o projeto do papel?</h2>
+            <p className="text-slate-400 text-sm sm:text-base">Me manda uma mensagem para conversarmos sobre o seu vídeo.</p>
           </div>
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#313AFF] hover:bg-[#252ccb] text-white font-bold px-8 py-4 rounded-xl transition flex items-center gap-2 text-lg shadow-lg shadow-[#313AFF]/30"
+            className="w-full sm:w-auto justify-center bg-[#313AFF] hover:bg-[#252ccb] text-white font-bold px-8 py-4 rounded-xl transition flex items-center gap-2 text-base sm:text-lg shadow-lg shadow-[#313AFF]/30"
           >
             <Send className="w-5 h-5 fill-white" /> Chamar no WhatsApp
           </a>
         </div>
 
-        <div className="text-center text-slate-500 text-sm">
+        <div className="text-center text-slate-500 text-xs sm:text-sm">
           <p>© {new Date().getFullYear()} - Todos os direitos reservados.</p>
         </div>
       </footer>
